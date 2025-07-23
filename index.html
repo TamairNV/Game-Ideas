@@ -111,7 +111,7 @@
                 <li><a href="#world" class="nav-link block p-4 font-semibold">World & Factions</a></li>
                 <li><a href="#loops" class="nav-link block p-4 font-semibold">Gameplay Loops</a></li>
                 <li><a href="#systems" class="nav-link block p-4 font-semibold">Core Systems</a></li>
-                <li><a href="#pipeline" class="nav-link block p-4 font-semibold">Art, Tech & UI</a></li>
+                <li><a href="#ui" class="nav-link block p-4 font-semibold">UI/UX Design</a></li>
                 <li><a href="#goal" class="nav-link block p-4 font-semibold">Endgame</a></li>
             </ul>
         </nav>
@@ -249,16 +249,39 @@
                     </div>
                 </div>
 
+                <h3>Stealth & Evasion</h3>
+                <p class="mb-4 text-gray-600">Staying under the radar of parents and teachers is crucial for survival. These mechanics focus on concealment and acting sober when you're not.</p>
+                <div class="card mb-6">
+                    <h4 class="font-bold text-lg">Hiding Your Stash</h4>
+                    <p class="text-sm text-gray-600">Your parents can randomly search your room. You must find and use hiding spots (e.g., under the bed, in a loose floorboard) for your drugs and other illicit items. The better the hiding spot, the lower the chance of discovery. Getting caught results in being grounded and having items confiscated.</p>
+                </div>
+                <h4 class="font-bold text-lg mb-2">Sobriety Check Minigames</h4>
+                <p class="mb-4 text-gray-600">If you come home after using consumables, your parents might get suspicious and trigger a minigame. Failure increases their suspicion meter, eventually leading to being grounded.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="card">
+                        <h5 class="font-bold">Breathing Game</h5>
+                        <p class="text-sm text-gray-600">A rhythm-based minigame where you must click in time with an on-screen prompt to simulate steady breathing.</p>
+                    </div>
+                    <div class="card">
+                        <h5 class="font-bold">Stand Still Game</h5>
+                        <p class="text-sm text-gray-600">Use your mouse or controller to keep your character balanced within a small circle, fighting against swaying effects.</p>
+                    </div>
+                    <div class="card">
+                        <h5 class="font-bold">Delete Emails Game</h5>
+                        <p class="text-sm text-gray-600">A time-pressured challenge to quickly find and delete incriminating emails or messages from your phone/computer before your parents see them.</p>
+                    </div>
+                </div>
+
                 <h3>Drugs & Consumables</h3>
                 <p class="mb-4 text-gray-600">Consumables act as "social lubricants" or provide temporary stat boosts. They can be bought, found, or received as gifts. Using them carries risks, such as addiction, negative reputation, or getting caught by authority figures.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="card">
                         <h4 class="font-bold text-lg">Alcohol</h4>
-                        <p class="text-sm text-gray-600"><strong>Effect:</strong> Lowers dialogue difficulty at parties. <br><strong>Risk:</strong> "Sloppy" reputation debuff if overused.</p>
+                        <p class="text-sm text-gray-600"><strong>Effect:</strong> Lowers dialogue difficulty at parties. <br><strong>Risk:</strong> "Sloppy" reputation debuff if overused. Triggers Sobriety Checks.</p>
                     </div>
                     <div class="card">
                         <h4 class="font-bold text-lg">Weed</h4>
-                        <p class="text-sm text-gray-600"><strong>Effect:</strong> Unlocks unique dialogue options with Druggies/Roadmen. <br><strong>Risk:</strong> Can cause "lazy" debuff, slowing movement.</p>
+                        <p class="text-sm text-gray-600"><strong>Effect:</strong> Unlocks unique dialogue options with Druggies/Roadmen. <br><strong>Risk:</strong> Can cause "lazy" debuff, slowing movement. Triggers Sobriety Checks.</p>
                     </div>
                     <div class="card">
                         <h4 class="font-bold text-lg">"Study Pills"</h4>
@@ -287,21 +310,8 @@
                 </div>
             </div>
 
-            <div id="pipeline" class="content-section mb-16">
-                <h2>Art, Tech & UI</h2>
-                <p class="mb-6 text-gray-600">The technical and artistic approach for bringing the world of "Legend" to life, including the user interface design.</p>
-                
-                <h3>Art & Tech Pipeline</h3>
-                <div class="card mb-8">
-                    <ul class="list-disc list-inside space-y-2">
-                        <li><strong>Characters:</strong> Customizable Asset Store models with Blendshapes.</li>
-                        <li><strong>Assets:</strong> Custom props and environments using KenShape & Asset Forge.</li>
-                        <li><strong>Animations:</strong> Custom actions in Cascadeur, blended in Unity with Animation Layers & Avatar Masks.</li>
-                        <li><strong>Visuals:</strong> "High" effects created with Post-Processing and Shader Graph in Unity.</li>
-                    </ul>
-                </div>
-
-                <h3>UI/UX & Menu Design</h3>
+            <div id="ui" class="content-section mb-16">
+                <h2>UI/UX Design</h2>
                 <p class="mb-4 text-gray-600">The UI is designed to be clean, intuitive, and mobile-inspired, centering all key interactions around the player's phone.</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="card">
@@ -377,7 +387,7 @@
             labels: ['Jocks', 'Roadmen', 'Nerds', 'Druggies', 'Gamers', 'Normals'],
             datasets: [{
                 label: 'Number of Students',
-                data: [6, 6, 8, 6, 8, 12], // Jocks: 1*10, Nerds: 2*4, etc.
+                data: [5, 6, 8, 6, 8, 12],
                 backgroundColor: [
                     '#A8DADC', // Muted Teal
                     '#457B9D', // Dark Blue
