@@ -1,383 +1,435 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Plan: Legend</title>
+    <title>Interactive Game Plan: Legend</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: "Warm Neutral" - A calm, harmonious palette with a base of warm grays and off-whites, complemented by muted blues and a subtle amber accent for highlights and calls to action. -->
-    <!-- Application Structure Plan: A single-page, vertical scrolling narrative structure. This was chosen to guide the user logically through the game's design, from the high-level concept down to the specific implementation details. The flow mirrors the creative process: Core Idea -> Gameplay Loop -> Systems -> Art/Animation -> Goal. Interactive cards and a dynamic chart are used to make dense information digestible and engaging, encouraging exploration rather than passive reading. Navigation is handled by a sticky header, allowing quick jumps between key sections. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals & Subtle Accents -->
+    <!-- Application Structure Plan: The SPA is structured thematically with a sticky side navigation for quick access to key game design pillars: Overview, World & Factions, Gameplay Loops, and Core Systems. This non-linear structure was chosen over a simple document scroll because a game design document is a reference tool. A developer or designer needs to quickly jump to a specific system (e.g., "Economy") without scrolling through unrelated content. Interactive charts for faction breakdowns and tabbed views for gameplay paths make complex information digestible and easy to compare. The user flow is designed for exploration and quick reference. -->
     <!-- Visualization & Content Choices: 
-        - Core Concept: Presented in large, clear text cards with icons for immediate understanding (Goal: Inform).
-        - Gameplay Loop: A CSS-based flowchart diagram to visually represent the cyclical nature of the game (Goal: Organize, Change). Interaction: Hover effects on each step provide more detail.
-        - Key Systems Chart: A dynamic Chart.js radar chart to visualize the core conflict between Popularity and Suspicion (Goal: Relationships, Compare). Interaction: Hovering over points reveals tooltips.
-        - Minigames/Stunts: Interactive cards that flip on click/tap to reveal more details, preventing information overload (Goal: Organize, Inform). Interaction: Click-to-flip.
-        - Art Pipeline: A structured list with icons and highlighted keywords for scannability (Goal: Inform).
-        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+        - Student Body Breakdown: Goal: Organize/Compare. Viz: Chart.js Doughnut Chart. Interaction: Hover for tooltips. Justification: A doughnut chart immediately shows the proportional size of each clique, which is more impactful than a list of numbers. Library: Chart.js (Canvas).
+        - Core Loops (School Day, Social): Goal: Organize. Viz: Styled HTML/CSS Flowcharts. Interaction: None, static visual. Justification: Flowcharts are the standard and most effective way to represent cyclical processes, making the game's core loops easy to follow. Method: Tailwind CSS.
+        - Economy Paths: Goal: Compare. Viz: Tabbed content blocks. Interaction: Click tabs to switch views. Justification: Tabs allow for a clean comparison of the three distinct money-making strategies without cluttering the UI. Method: Vanilla JS + Tailwind CSS.
+        - Heist System: Goal: Organize. Viz: Card-based layout. Interaction: Click to reveal details (future enhancement). Justification: Cards provide a scannable overview of high-level missions. Method: Tailwind CSS.
+        - Inter-Clique Dynamics: Goal: Relationships. Viz: HTML/CSS Matrix Table. Interaction: None, static visual. Justification: A matrix is the clearest way to show the predefined positive/negative relationships between different groups. Method: Tailwind CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F8F7F4; /* Warm Neutral Base */
-            color: #333;
+            background-color: #FDFBF8; /* Warm Off-White */
+            color: #4A4A4A; /* Dark Gray */
         }
         .nav-link {
-            transition: color 0.3s, border-bottom-color 0.3s;
-            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent;
         }
-        .nav-link:hover, .nav-link.active {
-            color: #D97706; /* Amber Accent */
-            border-bottom-color: #D97706;
+        .nav-link.active {
+            color: #C0842B; /* Muted Gold Accent */
+            border-left-color: #C0842B;
+            background-color: #F9F6F1;
+        }
+        .nav-link:hover {
+            color: #C0842B;
+            background-color: #F9F6F1;
+        }
+        .content-section h2 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #2D2D2D; /* Near Black */
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #EAEAEA;
+        }
+        .content-section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3D3D3D;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
         }
         .card {
             background-color: #FFFFFF;
-            border: 1px solid #E5E7EB;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #F0F0F0;
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        }
-        .flowchart-step {
-            position: relative;
-            padding: 1rem;
-            text-align: center;
-        }
-        .flowchart-step:not(:last-child)::after {
-            content: '→';
-            position: absolute;
-            right: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2rem;
-            color: #6B7280; /* Muted Blue/Gray */
-        }
-        @media (max-width: 1023px) and (min-width: 768px) {
-            .flowchart-step:nth-child(3n)::after {
-                content: '';
-            }
-        }
-        @media (max-width: 767px) {
-            .flowchart-step:nth-child(2n)::after {
-                content: '';
-            }
-        }
-        .flip-card { perspective: 1000px; }
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-        .flip-card-back { transform: rotateY(180deg); }
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
+            max-width: 450px;
+            margin: 1.5rem auto;
+            height: 350px;
             max-height: 400px;
         }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 400px;
-            }
+        .tab {
+            cursor: pointer;
+            padding: 0.75rem 1.5rem;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .tab.active {
+            color: #C0842B;
+            border-bottom-color: #C0842B;
+        }
+        .flow-step {
+            position: relative;
+            padding: 1rem;
+            background-color: #F9F6F1;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #D6BFA4; /* Muted Brown */
+        }
+        .flow-step:not(:last-child)::after {
+            content: '↓';
+            position: absolute;
+            bottom: -1.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: #D6BFA4;
         }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <!-- Header -->
-    <header id="header" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <h1 class="text-2xl font-bold text-gray-800">Legend: Game Plan</h1>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#concept" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-gray-600">Core Concept</a>
-                        <a href="#loop" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-gray-600">Gameplay Loop</a>
-                        <a href="#systems" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-gray-600">Systems</a>
-                        <a href="#pipeline" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-gray-600">Pipeline</a>
-                        <a href="#goal" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-gray-600">Ultimate Goal</a>
-                    </div>
-                </div>
+    <div class="min-h-screen lg:flex">
+        <!-- Sticky Navigation -->
+        <nav class="lg:w-64 lg:flex-shrink-0 lg:h-screen lg:sticky top-0 bg-white border-r border-gray-200">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold text-[#2D2D2D]">Legend</h1>
+                <p class="text-sm text-gray-500">Interactive Game Plan</p>
             </div>
+            <ul class="mt-4">
+                <li><a href="#overview" class="nav-link block p-4 font-semibold">Game Overview</a></li>
+                <li><a href="#world" class="nav-link block p-4 font-semibold">World & Factions</a></li>
+                <li><a href="#loops" class="nav-link block p-4 font-semibold">Gameplay Loops</a></li>
+                <li><a href="#systems" class="nav-link block p-4 font-semibold">Core Systems</a></li>
+                <li><a href="#pipeline" class="nav-link block p-4 font-semibold">Art, Tech & UI</a></li>
+                <li><a href="#goal" class="nav-link block p-4 font-semibold">Endgame</a></li>
+            </ul>
         </nav>
-    </header>
 
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-
-        <!-- Core Concept Section -->
-        <section id="concept" class="mb-16 scroll-mt-24">
-            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Core Concept</h2>
-            <p class="text-center text-lg text-gray-600 mb-8">This section outlines the fundamental idea of the game. It's a comedic social stealth life-sim where the player navigates the treacherous waters of high school popularity.</p>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="card p-6 text-center">
-                    <div class="text-4xl mb-4">🎭</div>
-                    <h3 class="text-xl font-semibold mb-2">The Game</h3>
-                    <p class="text-gray-600">A comedic social stealth life-sim. Players must blend in, perform risky actions, and manage their reputation in a stylized high school world.</p>
-                </div>
-                <div class="card p-6 text-center">
-                    <div class="text-4xl mb-4">🏆</div>
-                    <h3 class="text-xl font-semibold mb-2">The Goal</h3>
-                    <p class="text-gray-600">Become a high school "Legend" by gaining the highest possible Popularity score through a series of escalating dares and social events.</p>
-                </div>
-                <div class="card p-6 text-center">
-                    <div class="text-4xl mb-4">⚖️</div>
-                    <h3 class="text-xl font-semibold mb-2">The Conflict</h3>
-                    <p class="text-gray-600">Balance gaining Popularity from risky actions (drugs, stunts) against raising Suspicion from parents and school, which leads to consequences.</p>
+        <!-- Main Content -->
+        <main class="flex-1 p-6 md:p-10">
+            <div id="overview" class="content-section mb-16">
+                <h2>Game Overview</h2>
+                <div class="card">
+                    <p class="text-lg mb-2"><strong>Game Name:</strong> Legend (Working Title)</p>
+                    <p class="text-lg mb-4"><strong>Genre:</strong> Social Survival Sim / Narrative RPG / Comedy</p>
+                    <h3 class="!mt-0">Core Concept</h3>
+                    <p class="text-gray-600 leading-relaxed">On your first day at a new school, you discover everyone is against you: the teachers, the parents, the bullies, and even strangers. Your goal is to survive and thrive by building a network of loyal friends, which requires navigating a treacherous social landscape, managing your reputation, and throwing the best parties, all while staying under the radar.</p>
                 </div>
             </div>
-        </section>
 
-        <!-- Gameplay Loop Section -->
-        <section id="loop" class="mb-16 scroll-mt-24">
-            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Gameplay Loop</h2>
-            <p class="text-center text-lg text-gray-600 mb-12">The game revolves around a central cycle of risk and reward. This interactive flowchart shows how players will progress, making choices that directly impact their social standing and the challenges they face.</p>
-            <div class="card p-8">
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-                    <div class="flowchart-step card p-4"><strong class="block text-lg">1. Get Stuff</strong><span class="text-sm text-gray-500">Earn cash, find dealers</span></div>
-                    <div class="flowchart-step card p-4"><strong class="block text-lg">2. Go to Events</strong><span class="text-sm text-gray-500">Parties, hangouts</span></div>
-                    <div class="flowchart-step card p-4"><strong class="block text-lg">3. Get Popular</strong><span class="text-sm text-gray-500">Do dares, share drugs</span></div>
-                    <div class="flowchart-step card p-4"><strong class="block text-lg">4. Stay Hidden</strong><span class="text-sm text-gray-500">Pass "Sober Tests"</span></div>
-                    <div class="flowchart-step card p-4"><strong class="block text-lg">5. Face Results</strong><span class="text-sm text-gray-500">Grounded or new friends</span></div>
-                    <div class="flowchart-step card p-4"><strong class="block text-lg">6. Repeat</strong><span class="text-sm text-gray-500">Climb the social ladder</span></div>
+            <div id="world" class="content-section mb-16">
+                <h2>World & Factions</h2>
+                <p class="mb-6 text-gray-600">The game world is designed to be a microcosm of suburban teen life, with distinct zones offering different challenges and opportunities. The social ecosystem is the heart of the game, composed of various cliques and authority figures who react to the player's actions.</p>
+                
+                <h3>Key Locations</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="card"><strong>The Suburbs:</strong> Your home base for stealth and chores.</div>
+                    <div class="card"><strong>The Heights:</strong> Rich area with high-paying jobs.</div>
+                    <div class="card"><strong>Northwood High:</strong> The central social hub.</div>
+                    <div class="card"><strong>The "Badlands":</strong> High-risk area for acquiring items.</div>
+                    <div class="card"><strong>The Woods/Beach:</strong> Off-grid hangout and party spots.</div>
+                    <div class="card"><strong>The Skate Park:</strong> A specific clique's social hub.</div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Key Systems & Content Section -->
-        <section id="systems" class="mb-16 scroll-mt-24">
-            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Key Systems & Content</h2>
-            <p class="text-center text-lg text-gray-600 mb-8">These are the core mechanics that drive the gameplay. The central tension is visualized below, showing how actions affect both Popularity and Suspicion. Click the cards to explore the minigames and stunts.</p>
-            <div class="grid lg:grid-cols-2 gap-8 items-center">
-                <div class="card p-6">
-                    <h3 class="text-xl font-semibold text-center mb-4">The Popularity vs. Suspicion Dynamic</h3>
+                <h3>Student Body Composition</h3>
+                <p class="mb-4 text-gray-600">The student body is divided into distinct cliques. This chart shows the total number of students within each major clique, illustrating the social landscape you'll need to navigate.</p>
+                <div class="card">
                     <div class="chart-container">
-                        <canvas id="systemsChart"></canvas>
+                        <canvas id="cliqueChart"></canvas>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="flip-card card h-56 cursor-pointer" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <h3 class="text-xl font-semibold">"Sober Test" Minigames</h3>
-                                <p class="text-sm text-gray-500 mt-2">Click for details</p>
-                            </div>
-                            <div class="flip-card-back bg-blue-100 text-left text-sm">
-                                <ul class="list-disc list-inside space-y-2">
-                                    <li><strong>Rhythm Breathing:</strong> Tap in time to keep breathing steady.</li>
-                                    <li><strong>Steady Walker:</strong> Use QWOP-style controls to walk straight.</li>
-                                    <li><strong>Dialogue Focus:</strong> Pick sane replies from absurd options.</li>
-                                </ul>
-                            </div>
+
+                <h3>Inter-Clique Dynamics</h3>
+                <p class="mb-4 text-gray-600">Cliques have pre-existing relationships. Actions that please one group may anger their rivals. This matrix outlines the starting allegiances and conflicts.</p>
+                <div class="card overflow-x-auto">
+                    <table class="w-full text-center">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="p-2"></th>
+                                <th class="p-2 font-semibold">Jocks</th>
+                                <th class="p-2 font-semibold">Nerds</th>
+                                <th class="p-2 font-semibold">Druggies</th>
+                                <th class="p-2 font-semibold">Roadmen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-2 font-semibold text-left">Jocks</td>
+                                <td class="p-2 bg-green-100 text-green-800">✓</td>
+                                <td class="p-2 bg-red-100 text-red-800">X</td>
+                                <td class="p-2 bg-gray-100">--</td>
+                                <td class="p-2 bg-gray-100">--</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-semibold text-left">Nerds</td>
+                                <td class="p-2 bg-red-100 text-red-800">X</td>
+                                <td class="p-2 bg-green-100 text-green-800">✓</td>
+                                <td class="p-2 bg-gray-100">--</td>
+                                <td class="p-2 bg-red-100 text-red-800">X</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-semibold text-left">Druggies</td>
+                                <td class="p-2 bg-gray-100">--</td>
+                                <td class="p-2 bg-gray-100">--</td>
+                                <td class="p-2 bg-green-100 text-green-800">✓</td>
+                                <td class="p-2 bg-green-100 text-green-800">✓</td>
+                            </tr>
+                             <tr>
+                                <td class="p-2 font-semibold text-left">Roadmen</td>
+                                <td class="p-2 bg-gray-100">--</td>
+                                <td class="p-2 bg-red-100 text-red-800">X</td>
+                                <td class="p-2 bg-green-100 text-green-800">✓</td>
+                                <td class="p-2 bg-green-100 text-green-800">✓</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="loops" class="content-section mb-16">
+                <h2>Gameplay Loops</h2>
+                <p class="mb-6 text-gray-600">The game is built around two interconnected loops: the daily school schedule and the overarching social progression. These systems create a compelling rhythm of risk, reward, and relationship management.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3>The School Day: A Typical Loop</h3>
+                        <div class="card">
+                            <div class="flow-step"><strong>1. Pre-Bell:</strong> Arrive at school, observe cliques, and initiate conversations.</div>
+                            <div class="flow-step"><strong>2. Period Menu:</strong> Choose to "Go to Class" (maintain grade) or "Skip Class" (free-roam, lower grade).</div>
+                            <div class="flow-step"><strong>3. Between Periods:</strong> Short window to navigate hallways, talk to NPCs, and trigger events.</div>
+                            <div class="flow-step"><strong>4. After School:</strong> Free-roam period for jobs, hangouts, and exploration.</div>
+                            <div class="flow-step"><strong>5. Curfew:</strong> Must be home by 8 PM to avoid raising parent suspicion and getting grounded.</div>
                         </div>
                     </div>
-                    <div class="flip-card card h-56 cursor-pointer" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <h3 class="text-xl font-semibold">Stealth Minigames</h3>
-                                <p class="text-sm text-gray-500 mt-2">Click for details</p>
-                            </div>
-                            <div class="flip-card-back bg-green-100 text-left text-sm">
-                                <ul class="list-disc list-inside space-y-2">
-                                    <li><strong>Sneaking Out:</strong> Top-down stealth to evade parents at night.</li>
-                                    <li><strong>Hiding Stash:</strong> Timed puzzle to find a hiding spot in your room.</li>
-                                    <li><strong>Deleting Emails:</strong> Erase bad reports from the family PC.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card card h-56 cursor-pointer md:col-span-2" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                             <div class="flip-card-front">
-                                <h3 class="text-xl font-semibold">Stunts & Dares</h3>
-                                <p class="text-sm text-gray-500 mt-2">Click for details</p>
-                            </div>
-                            <div class="flip-card-back bg-yellow-100 text-left text-sm">
-                                <ul class="list-disc list-inside space-y-2">
-                                    <li><strong>Low-Tier:</strong> Steal a gnome, order absurd drive-thru food.</li>
-                                    <li><strong>Mid-Tier:</strong> Hijack the school PA, spike the prom punch.</li>
-                                    <li><strong>Legend-Tier:</strong> Party in the school gym, host an illegal rave.</li>
-                                </ul>
-                            </div>
+                    <div>
+                        <h3>The Core Social Loop</h3>
+                        <div class="card">
+                            <div class="flow-step"><strong>1. Make Friends:</strong> Succeed in dialogue minigames to get phone numbers.</div>
+                            <div class="flow-step"><strong>2. Go Out:</strong> Get invited to or initiate hangouts at various locations.</div>
+                            <div class="flow-step"><strong>3. Maintain Friendships:</strong> Avoid negative events like standing up friends or siding against them.</div>
+                            <div class="flow-step"><strong>4. Acquire Resources:</strong> Earn money and buy social lubricants to fund your social life.</div>
+                            <div class="flow-step"><strong>5. Throw Parties:</strong> The ultimate social goal, leveraging your network and resources.</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- Art & Animation Pipeline Section -->
-        <section id="pipeline" class="mb-16 scroll-mt-24">
-            <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Art & Animation Pipeline</h2>
-            <p class="text-center text-lg text-gray-600 mb-8">This section details the programmer-friendly tools and techniques chosen to achieve a unique, cartoony aesthetic without requiring expert-level artistry.</p>
-            <div class="card p-8">
-                <ul class="space-y-6">
-                    <li class="flex items-start">
-                        <span class="text-2xl mr-4">🧍</span>
-                        <div>
-                            <h4 class="font-semibold">Characters</h4>
-                            <p class="text-gray-600">Use customizable Asset Store models with <span class="font-semibold text-blue-600">Blendshapes</span>.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="text-2xl mr-4">🌳</span>
-                        <div>
-                            <h4 class="font-semibold">Props/Environments</h4>
-                            <p class="text-gray-600">Create custom assets with <span class="font-semibold text-blue-600">KenShape</span> & <span class="font-semibold text-blue-600">Asset Forge</span>.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="text-2xl mr-4">🏃</span>
-                        <div>
-                            <h4 class="font-semibold">Custom Animations</h4>
-                            <p class="text-gray-600">Create unique actions with <span class="font-semibold text-blue-600">Cascadeur</span>.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="text-2xl mr-4">🛠️</span>
-                        <div>
-                            <h4 class="font-semibold">Implementation</h4>
-                            <p class="text-gray-600">Use Unity's <span class="font-semibold text-blue-600">Animation Layers</span> & <span class="font-semibold text-blue-600">Avatar Masks</span> for smooth blending.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="text-2xl mr-4">✨</span>
-                        <div>
-                            <h4 class="font-semibold">Visuals</h4>
-                            <p class="text-gray-600">Use <span class="font-semibold text-blue-600">Post-Processing</span> & <span class="font-semibold text-blue-600">Shader Graph</span> for "high" effects.</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </section>
+            <div id="systems" class="content-section mb-16">
+                <h2>Core Systems</h2>
+                <p class="mb-6 text-gray-600">These are the underlying mechanics that drive the gameplay loops, providing depth and player choice.</p>
+                
+                <h3>Economy & Money-Making</h3>
+                <p class="mb-4 text-gray-600">Players have multiple paths to earn money, each with its own risks and rewards. Choose your hustle to fund your social ambitions.</p>
+                <div class="card">
+                    <div class="flex border-b border-gray-200">
+                        <div class="tab active" data-tab="straight">The Straight & Narrow</div>
+                        <div class="tab" data-tab="hustle">The Side Hustle</div>
+                        <div class="tab" data-tab="bully">The Bully</div>
+                    </div>
+                    <div id="straight" class="tab-content p-4">
+                        <p><strong>Jobs App:</strong> Use a "Facepage" app on your phone to find legitimate jobs like mowing lawns. Each job is a quick, fun minigame.</p>
+                        <p class="mt-2"><strong>Tutoring:</strong> If your grades are high enough, you can tutor other students for a significant cash reward.</p>
+                    </div>
+                    <div id="hustle" class="tab-content p-4 hidden">
+                         <p><strong>Item Flipping:</strong> Observe NPCs to see what items they desire. Find or buy these items from a "Flipping App" and sell them for a profit.</p>
+                    </div>
+                    <div id="bully" class="tab-content p-4 hidden">
+                        <p><strong>Intimidation:</strong> A high-risk, high-reward path. Intimidate other students to get cash and completed homework, but risk damaging your reputation and attracting unwanted attention.</p>
+                    </div>
+                </div>
 
-        <!-- Ultimate Goal Section -->
-        <section id="goal" class="text-center scroll-mt-24">
-             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">The Ultimate Goal</h2>
-             <p class="text-center text-lg text-gray-600 mb-8">All gameplay and progression systems build towards a single, epic conclusion. This provides a clear, motivating endpoint for the player's journey.</p>
-            <div class="card p-8 bg-gray-800 text-white">
-                <h3 class="text-2xl font-bold mb-4">Become a Legend</h3>
-                <p class="text-lg text-gray-300">Achieve "Legend" status by pulling off a final, massive stunt at the end of the school year, cementing your place in high school history.</p>
+                <h3>Drugs & Consumables</h3>
+                <p class="mb-4 text-gray-600">Consumables act as "social lubricants" or provide temporary stat boosts. They can be bought, found, or received as gifts. Using them carries risks, such as addiction, negative reputation, or getting caught by authority figures.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="card">
+                        <h4 class="font-bold text-lg">Alcohol</h4>
+                        <p class="text-sm text-gray-600"><strong>Effect:</strong> Lowers dialogue difficulty at parties. <br><strong>Risk:</strong> "Sloppy" reputation debuff if overused.</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-bold text-lg">Weed</h4>
+                        <p class="text-sm text-gray-600"><strong>Effect:</strong> Unlocks unique dialogue options with Druggies/Roadmen. <br><strong>Risk:</strong> Can cause "lazy" debuff, slowing movement.</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-bold text-lg">"Study Pills"</h4>
+                        <p class="text-sm text-gray-600"><strong>Effect:</strong> Temporary boost to grades/tutoring income. <br><strong>Risk:</strong> High chance of addiction, leading to stat penalties if not consumed.</p>
+                    </div>
+                </div>
+
+                <h3>Heist System</h3>
+                <p class="mb-4 text-gray-600">Heists are large-scale missions requiring a team. Recruiting members involves building trust within their respective cliques.</p>
+                <div class="card mb-4">
+                    <h4 class="font-bold text-lg mb-2">The Path to Recruitment</h4>
+                    <div class="flow-step"><strong>1. Complete Clique Quests:</strong> Do favors for a target clique (e.g., help a Nerd with homework, win a sports minigame for a Jock).</div>
+                    <div class="flow-step"><strong>2. Build Trust Meter:</strong> Each completed quest increases your "Trust" with that clique and key members.</div>
+                    <div class="flow-step"><strong>3. Recruit Specialist:</strong> Once trust is high enough, you can approach a specific member and ask them to join your heist crew.</div>
+                </div>
+                <p class="mb-4 text-gray-600">Below are examples of heists and the required specialists you'll need to recruit.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="card">
+                        <h4 class="font-bold text-lg">Steal Teacher's Shoes</h4>
+                        <p class="text-sm text-gray-500">Required: Jock for diversion, Nerd for camera loop.</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-bold text-lg">Break into Principal's Office</h4>
+                        <p class="text-sm text-gray-500">Required: Druggie for sedative, Normie for lookout.</p>
+                    </div>
+                </div>
             </div>
-        </section>
-    </main>
+
+            <div id="pipeline" class="content-section mb-16">
+                <h2>Art, Tech & UI</h2>
+                <p class="mb-6 text-gray-600">The technical and artistic approach for bringing the world of "Legend" to life, including the user interface design.</p>
+                
+                <h3>Art & Tech Pipeline</h3>
+                <div class="card mb-8">
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong>Characters:</strong> Customizable Asset Store models with Blendshapes.</li>
+                        <li><strong>Assets:</strong> Custom props and environments using KenShape & Asset Forge.</li>
+                        <li><strong>Animations:</strong> Custom actions in Cascadeur, blended in Unity with Animation Layers & Avatar Masks.</li>
+                        <li><strong>Visuals:</strong> "High" effects created with Post-Processing and Shader Graph in Unity.</li>
+                    </ul>
+                </div>
+
+                <h3>UI/UX & Menu Design</h3>
+                <p class="mb-4 text-gray-600">The UI is designed to be clean, intuitive, and mobile-inspired, centering all key interactions around the player's phone.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="card">
+                        <h4 class="font-bold text-lg">The Phone</h4>
+                        <p class="text-sm text-gray-600">The central menu hub. Access apps for Jobs ("Facepage"), Social contacts, Item-flipping, and viewing your Reputation status.</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-bold text-lg">Dialogue Interface</h4>
+                        <p class="text-sm text-gray-600">A choice-based system with timed responses. Options are colored based on the associated social skill (e.g., Intimidation, Charm).</p>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-bold text-lg">In-Game HUD</h4>
+                        <p class="text-sm text-gray-600">Minimalist display showing current time, money, and a small icon indicating your current reputation level (e.g., thumbs up/down).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="goal" class="content-section">
+                <h2>Endgame</h2>
+                <p class="mb-6 text-gray-600">The ultimate objective that drives the player's journey from start to finish.</p>
+                <div class="card text-center p-8 bg-gradient-to-br from-[#F9F6F1] to-white">
+                    <h3 class="!mt-0 text-[#C0842B]">The Ultimate Goal</h3>
+                    <p class="text-xl leading-relaxed text-gray-700">Go from a lonely newcomer to a social legend with a strong circle of loyal friends. Use your network, reputation, and resources to throw the most legendary end-of-year party the school has ever seen.</p>
+                </div>
+            </div>
+        </main>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Chart.js Radar Chart
-            const ctx = document.getElementById('systemsChart').getContext('2d');
-            const systemsChart = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: ['Doing Stunts', 'Sharing Drugs', 'Attending Parties', 'Failing Minigames', 'Getting Caught'],
-                    datasets: [{
-                        label: 'Popularity Gain',
-                        data: [10, 8, 7, 0, 0],
-                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                        borderColor: 'rgba(59, 130, 246, 1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
-                    }, {
-                        label: 'Suspicion Gain',
-                        data: [7, 6, 4, 8, 10],
-                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
-                        borderColor: 'rgba(239, 68, 68, 1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: 'rgba(239, 68, 68, 1)',
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            pointLabels: {
-                                font: {
-                                    size: 12
-                                }
-                            },
-                            ticks: {
-                                backdropColor: '#F8F7F4',
-                                stepSize: 2
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.r !== null) {
-                                        label += context.parsed.r;
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
+        // Tab switching for Economy section
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(item => item.classList.remove('active'));
+                tab.classList.add('active');
+
+                const targetId = tab.getAttribute('data-tab');
+                tabContents.forEach(content => {
+                    content.classList.add('hidden');
+                    if (content.id === targetId) {
+                        content.classList.remove('hidden');
                     }
-                }
-            });
-
-            // Smooth scrolling and active nav link highlighting
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        navLinks.forEach(link => {
-                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
-                        });
-                    }
-                });
-            }, { rootMargin: "-50% 0px -50% 0px" });
-
-            sections.forEach(section => {
-                observer.observe(section);
-            });
-
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
                 });
             });
         });
+
+        // Active navigation link scrolling
+        const sections = document.querySelectorAll('.content-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 60) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Chart.js implementation for Cliques
+        const ctx = document.getElementById('cliqueChart').getContext('2d');
+        const cliqueData = {
+            labels: ['Jocks', 'Roadmen', 'Nerds', 'Druggies', 'Gamers', 'Normals'],
+            datasets: [{
+                label: 'Number of Students',
+                data: [6, 6, 8, 6, 8, 12], // Jocks: 1*10, Nerds: 2*4, etc.
+                backgroundColor: [
+                    '#A8DADC', // Muted Teal
+                    '#457B9D', // Dark Blue
+                    '#F1FAEE', // Light Green
+                    '#E63946', // Muted Red
+                    '#F4A261', // Muted Orange
+                    '#2A9D8F'  // Dark Teal
+                ],
+                borderColor: '#FFFFFF',
+                borderWidth: 3,
+                hoverOffset: 4
+            }]
+        };
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: cliqueData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                             font: {
+                                family: "'Inter', sans-serif",
+                                size: 14
+                            },
+                            color: '#4A4A4A'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#2D2D2D',
+                        titleFont: { size: 14, family: "'Inter', sans-serif" },
+                        bodyFont: { size: 12, family: "'Inter', sans-serif" },
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                  return label.join(' ');
+                                } else {
+                                  return label;
+                                }
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
     </script>
+
 </body>
 </html>
