@@ -1,299 +1,300 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Comer - An Indie Social Survival Sim</title>
+    <title>Game Plan: Legend (Working Title)</title>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
     <style>
+        /* Custom styles to complement Tailwind */
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #1a202c;
-            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* bg-gray-900 */
+            color: #d1d5db; /* text-gray-300 */
         }
-        .low-poly-bg {
-            background-image: url('https://www.transparenttextures.com/patterns/low-poly-grid.png');
+
+        /* Style for the active navigation link */
+        .nav-link.active {
+            color: #ffffff;
+            background-color: #374151; /* bg-gray-700 */
         }
-        .card {
-            background-color: #2d3748;
-            border-radius: 1rem;
-            padding: 2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        /* Simple fade-in animation for elements on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        .btn {
-            background-color: #4a5568;
-            color: #e2e8f0;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
+
+        /* Custom gradient for the hero section */
+        .hero-gradient {
+            background: linear-gradient(135deg, #1f2937, #374151);
         }
-        .btn:hover {
-            background-color: #2d3748;
-        }
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
-        }
-        .accordion-button.active + .accordion-content {
-            max-height: 2000px; /* Increased max-height for more content */
-        }
-        .clique-tag {
+
+        /* Custom styling for list bullets */
+        .custom-list li::before {
+            content: '✓';
+            color: #34d399; /* emerald-400 */
+            font-weight: bold;
             display: inline-block;
-            background-color: #4a5568;
-            color: #e2e8f0;
-            padding: 0.5rem 1rem;
-            margin: 0.25rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-        }
-        .detail-list {
-            list-style-type: disc;
-            list-style-position: inside;
-            margin-left: 1rem;
-            margin-top: 1rem;
-        }
-        .detail-list li {
-            margin-bottom: 0.5rem;
+            width: 1em;
+            margin-left: -1em;
         }
     </style>
 </head>
-<body class="low-poly-bg">
+<body class="antialiased">
 
-<!-- Header -->
-<header class="py-6 px-4 md:px-8 sticky top-0 z-50 bg-gray-800 bg-opacity-80 backdrop-blur-md">
-    <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-3xl font-bold text-white">New Comer</h1>
-        <nav>
-            <a href="#overview" class="btn">Overview</a>
-            <a href="#gameplay" class="btn ml-4">Gameplay</a>
-            <a href="#systems" class="btn ml-4">Systems</a>
-        </nav>
-    </div>
+<!-- Header & Navigation -->
+<header id="header" class="bg-gray-800/80 backdrop-blur-sm sticky top-0 z-50 shadow-lg">
+    <nav class="container mx-auto px-6 py-3">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-xl font-bold text-white mb-2 md:mb-0">Legend</h1>
+            <div id="nav-links" class="flex flex-wrap justify-center space-x-2 md:space-x-4">
+                <a href="#overview" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">Overview</a>
+                <a href="#world" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">World</a>
+                <a href="#gameplay" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">Gameplay</a>
+                <a href="#systems" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">Systems</a>
+                <a href="#endgame" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">Endgame</a>
+            </div>
+        </div>
+    </nav>
 </header>
 
-<!-- Hero Section -->
-<section class="text-center py-20 px-4">
-    <h2 class="text-5xl font-extrabold text-white mb-4">Survive High School. Throw the Party.</h2>
-    <p class="text-xl text-gray-400 max-w-3xl mx-auto">A social survival sim where you navigate the treacherous halls of Northwood High, build your crew, and aim for legendary status.</p>
-</section>
-
 <!-- Main Content -->
-<main class="container mx-auto px-4 md:px-8 py-12">
+<main class="container mx-auto px-6 py-8">
 
-    <!-- Game Overview Section -->
-    <section id="overview" class="mb-20">
-        <div class="card">
-            <h3 class="text-3xl font-bold mb-6 text-center text-white">The Lowdown</h3>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h4 class="text-2xl font-semibold mb-2 text-teal-300">Core Concept</h4>
-                    <p class="text-gray-300">You're the new kid. Your mission: survive the social jungle of high school, forge alliances, stay off the radar of the fun police, and cap it all off by throwing the most epic party this town has ever seen.</p>
-                </div>
-                <div>
-                    <h4 class="text-2xl font-semibold mb-2 text-teal-300">Genre</h4>
-                    <p class="text-gray-300">Social Survival Sim meets Narrative RPG with a heavy dose of Comedy.</p>
-                </div>
-            </div>
+    <!-- Hero Section -->
+    <section class="text-center mb-16 reveal">
+        <h1 class="text-5xl md:text-7xl font-black text-white tracking-tighter mb-2">Legend</h1>
+        <p class="text-xl md:text-2xl text-gray-400">(Working Title)</p>
+        <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-300">A Social Survival Sim / Narrative RPG / Comedy where you navigate high school, build a crew, and aim to throw the most legendary party ever.</p>
+    </section>
+
+    <!-- Game Overview -->
+    <section id="overview" class="mb-16 scroll-mt-20 reveal">
+        <h2 class="text-3xl font-bold text-white border-b-2 border-emerald-500 pb-2 mb-6">Game Overview</h2>
+        <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+            <ul class="space-y-4 text-lg">
+                <li><strong class="text-white">Genre:</strong> Social Survival Sim / Narrative RPG / Comedy</li>
+                <li><strong class="text-white">Core Concept:</strong> As a new student, you must navigate a hostile high school environment. The goal is to survive by building a network of loyal friends, managing your reputation, and staying under the radar of authority figures, all while aiming to throw the most legendary party ever.</li>
+            </ul>
         </div>
     </section>
 
     <!-- World & Factions -->
-    <section id="world" class="mb-20">
-        <div class="card">
-            <h3 class="text-3xl font-bold mb-6 text-center text-white">Your Turf</h3>
-            <div class="grid md:grid-cols-2 gap-8 items-start">
-                <div>
-                    <h4 class="text-2xl font-semibold mb-4 text-lime-300">Key Locations</h4>
-                    <ul class="list-disc list-inside text-gray-300 space-y-2">
-                        <li><strong>The Suburbs:</strong> Your home base.</li>
-                        <li><strong>The Heights:</strong> Where the rich kids live.</li>
-                        <li><strong>Northwood High:</strong> The main social battleground.</li>
-                        <li><strong>The "Badlands":</strong> Risky, but rewarding.</li>
-                        <li><strong>The Woods/Beach:</strong> Classic hangout spots.</li>
-                        <li><strong>The Skate Park:</strong> Grind and chill.</li>
+    <section id="world" class="mb-16 scroll-mt-20 reveal">
+        <h2 class="text-3xl font-bold text-white border-b-2 border-emerald-500 pb-2 mb-6">World & Factions</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h3 class="text-xl font-bold text-white mb-4">Key Locations</h3>
+                <ul class="space-y-2 custom-list pl-4">
+                    <li>The Suburbs (home)</li>
+                    <li>The Heights (rich area)</li>
+                    <li>Northwood High (social hub)</li>
+                    <li>The "Badlands" (risky area)</li>
+                    <li>The Woods/Beach (hangouts)</li>
+                    <li>The Skate Park</li>
+                </ul>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h3 class="text-xl font-bold text-white mb-4">Student Factions (Cliques)</h3>
+                <ul class="space-y-2">
+                    <li>Jocks (5), Roadmen (6), Nerds (8), Druggies (6), Gamers (8), Normals (12)</li>
+                </ul>
+                <p class="mt-4 text-gray-400">Cliques have pre-existing relationships (e.g., Jocks vs. Nerds), and actions affecting one group can impact your standing with another.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gameplay Loops -->
+    <section id="gameplay" class="mb-16 scroll-mt-20 reveal">
+        <h2 class="text-3xl font-bold text-white border-b-2 border-emerald-500 pb-2 mb-6">Gameplay Loops</h2>
+        <div class="space-y-8">
+            <!-- School Day Loop -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h3 class="text-xl font-bold text-white mb-4">School Day Loop</h3>
+                <ol class="list-decimal list-inside space-y-2">
+                    <li><strong>Morning:</strong> Arrive at school, socialize.</li>
+                    <li><strong>Class:</strong> Choose to attend or skip.</li>
+                    <li><strong>Lunchtime:</strong> A free period with risks. Teachers patrol the grounds.</li>
+                    <li><strong>Passing Periods:</strong> Navigate hallways, interact with NPCs.</li>
+                    <li><strong>After School:</strong> Free-roam for jobs, hangouts.</li>
+                    <li><strong>Curfew:</strong> Be home by 8 PM to avoid suspicion.</li>
+                </ol>
+            </div>
+            <!-- Hangouts (Expanded) -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h3 class="text-xl font-bold text-white mb-4">Social Life & Hangouts</h3>
+                <p class="mb-4">The core of your social progression. It's not just about who you invite, but where you go.</p>
+                <ul class="space-y-3 mt-4 custom-list pl-4">
+                    <li><strong>Discovering Spots:</strong> You must find hangout locations yourself. Discover them by exploring the world, overhearing NPC conversations ("Did you hear about the old abandoned building?"), or getting tips from trusted friends.</li>
+                    <li><strong>Scouting:</strong> Once a potential spot is found, you can "Scout" it. This reveals its properties: capacity (how many people can fit), privacy level (chance of being busted by cops or parents), and available activities (e.g., a beach has a fire pit, a house has a sound system).</li>
+                    <li><strong>Social Chemistry:</strong> A successful hangout requires a compatible group. Inviting a Jock and a Nerd to the same small hangout might lower the fun for everyone, damaging your reputation.</li>
+                    <li><strong>Sharing is Caring:</strong> Bringing consumables (especially drugs) and sharing them is a high-risk, high-reward way to rapidly boost your standing with everyone present.</li>
+                </ul>
+            </div>
+            <!-- Dynamic Spawning -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h3 class="text-xl font-bold text-white mb-4">Dynamic Spawning</h3>
+                <p>When you load a save, you won't always spawn where you left off. Instead, you might spawn in a random, context-appropriate situation (waking up in your bed, in a bush after a party, etc.) for a more dynamic start.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Systems -->
+    <section id="systems" class="mb-16 scroll-mt-20 reveal">
+        <h2 class="text-3xl font-bold text-white border-b-2 border-emerald-500 pb-2 mb-6">Core Systems</h2>
+
+        <!-- Economy (Expanded) -->
+        <div class="mb-12">
+            <h3 class="text-2xl font-semibold text-white mb-4">A. Economy & Money-Making</h3>
+            <div class="space-y-6">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-xl border-l-4 border-green-500">
+                    <h4 class="font-bold text-lg text-white mb-2">The Straight & Narrow: Minigame Details</h4>
+                    <ul class="space-y-4 text-gray-300">
+                        <li><strong>Mowing Lawns:</strong> A top-down view of the lawn appears. You must guide the mower along a highlighted path. Going off-path reduces your pay. Hitting obstacles like flowerbeds or garden gnomes results in no pay and a reputation loss with the homeowner. Upgrading to a ride-on mower increases speed but makes tight turns harder.</li>
+                        <li><strong>Washing Cars:</strong> The vehicle is presented with a "dirt map" overlay. You control a cleaning tool to scrub off the dirt. A timer ticks down. The goal is to clean the car as evenly and quickly as possible. Better performance earns a bigger tip. New tools (power washer, better sponges) can be purchased to increase efficiency.</li>
+                        <li><strong>Tutoring:</strong> When you accept, you meet the student at lunch. A series of simple puzzles (math problems, word scrambles) appears. The difficulty depends on the student's clique (e.g., tutoring a Jock is easier than a Nerd). Completing it successfully gives you cash and a relationship boost.</li>
                     </ul>
                 </div>
-                <div>
-                    <h4 class="text-2xl font-semibold mb-4 text-lime-300">The Cliques</h4>
-                    <p class="text-gray-400 mb-4">Every action has a reaction. Piss off the Jocks, and you might find an unlikely friend in the Nerds. It's all connected.</p>
-                    <div class="flex flex-wrap">
-                        <span class="clique-tag">Jocks</span>
-                        <span class="clique-tag">Roadmen</span>
-                        <span class="clique-tag">Nerds</span>
-                        <span class="clique-tag">Druggies</span>
-                        <span class="clique-tag">Gamers</span>
-                        <span class="clique-tag">Normals</span>
-                    </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-xl border-l-4 border-red-500">
+                    <h4 class="font-bold text-lg text-white mb-2">The Side Hustle: Details</h4>
+                    <ul class="space-y-4 text-gray-300">
+                        <li><strong>Flipping Items:</strong> Use an "eBuy-like" app to buy items that change every few days. NPCs will have thought bubbles showing an item they want, which you can then find or buy and sell to them for a profit.</li>
+                        <li><strong>The Bully (Intimidation Mechanic):</strong> Once your reputation is high enough, you unlock aggressive dialogue options. When talking to an NPC, you can choose intimidating lines to raise their "Intimidation" meter. If the meter is full when you ask for their lunch money, they'll give it to you. If you fail, you lose social standing from embarrassment. Doing this too often risks getting caught by teachers.</li>
+                    </ul>
                 </div>
             </div>
         </div>
+
+        <!-- Stealth (Expanded) -->
+        <div class="mb-12">
+            <h3 class="text-2xl font-semibold text-white mb-4">B. Stealth & Evasion</h3>
+            <div class="space-y-6">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+                    <h4 class="font-bold text-lg text-white mb-2">Hiding Stash: The Mechanic</h4>
+                    <p class="text-gray-300">You can't keep everything in your backpack. You must manage your illicit items across a network of hiding spots. Your "Stash" menu shows a list of known spots, their inventory capacity, and a risk percentage. A high-risk spot (under your bed) is convenient but checked often. A low-risk spot (a loose brick behind the gym) is safer but harder to access. If a stash is found, you lose the items and gain a "Suspicion" debuff with your parents or the school, leading to more frequent searches.</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+                    <h4 class="font-bold text-lg text-white mb-2">Sobriety Check Minigames</h4>
+                    <ul class="space-y-4 text-gray-300">
+                        <li><strong>Breathing Game:</strong> A vertical bar appears with a "calm zone". A meter rises and falls with your breath (holding and releasing a key). You must keep the meter inside the zone for a set duration. Being too erratic causes a fail.</li>
+                        <li><strong>Stand Still Game:</strong> To prove you can walk straight, a sequence of keys (W, A, S, D) appears. You must press them in the correct order before a timer runs out. The sequences get longer and faster the more intoxicated you are.</li>
+                        <li><strong>Delete Emails Game:</strong> A three-stage challenge. 1) Sneak past family members without being seen. 2) At the computer, a minigame starts where you must identify the four most-used keys by finding fingerprints to guess the password. 3) Once logged in, you have 60 seconds to find and delete incriminating emails from the inbox before a parent walks in.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drugs (Expanded) -->
+        <div class="mb-12">
+            <h3 class="text-2xl font-semibold text-white mb-4">C. Drugs & Consumables: Acquisition Paths</h3>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-xl space-y-4">
+                <p><strong>Alcohol:</strong> Overhear students talking about fake IDs to get a lead on the ID Maker (a Nerd). They'll ask you to complete a fetch quest (e.g., steal a specific textbook from the library). Once you deliver, you can buy a fake ID. Using it at a store might trigger a random "Nerve" check minigame.</p>
+                <p><strong>Weed:</strong> Build your reputation with the Druggie or Roadmen cliques. They'll eventually give you a tip on a dealer's location and the time they operate. Meet the dealer and pass a "vibe check" dialogue. Consistent purchases build loyalty, unlocking better prices and more potent strains.</p>
+                <p><strong>Shrooms:</strong> Become "Best Friends" with a weed dealer. During a specific in-game week, they'll mention a special "harvest" is available, giving you a limited window to purchase.</p>
+                <p><strong>Molly:</strong> Requires a very high social standing with a specific party-promoter Jock. You'll need to help them successfully pull off a party (a questline involving distributing flyers and setting up gear). As a reward, they'll give you their supplier's contact.</p>
+                <p><strong>LSD & DMT:</strong> Max out your loyalty with your main weed dealer. They'll give you a cryptic note. Solve the riddle to find a reclusive dealer in a hidden location (like deep in the Woods). This dealer only sells LSD. After building a high standing with them through several expensive purchases, they will finally offer you DMT as a sign of ultimate trust.</p>
+            </div>
+        </div>
+
+        <!-- Heists -->
+        <div>
+            <h3 class="text-2xl font-semibold text-white mb-4">D. Heist System</h3>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+                <p>Managed via a "Notes" app on your phone. Heists are unlocked by meeting certain requirements. The loop is: Unlock -> Recruit Crew -> Complete Setups -> Execute Heist for big rewards.</p>
+                <p class="mt-2 text-gray-400">Examples range from stealing a teacher's wallet to raiding a rival dealer's stash house.</p>
+            </div>
+        </div>
+
     </section>
 
-    <!-- Gameplay Loops Section -->
-    <section id="gameplay" class="mb-20">
-        <h3 class="text-3xl font-bold mb-6 text-center text-white">A Day in the Life</h3>
+    <!-- UI/UX & Endgame -->
+    <section id="endgame" class="mb-16 scroll-mt-20 reveal">
+        <h2 class="text-3xl font-bold text-white border-b-2 border-emerald-500 pb-2 mb-6">UI & Endgame</h2>
         <div class="grid md:grid-cols-2 gap-8">
-            <div class="card">
-                <h4 class="text-2xl font-semibold mb-2 text-yellow-300">The School Day Loop</h4>
-                <p class="text-gray-300">From the morning bell to the 8 PM curfew, every moment counts. Attend class or skip? Socialize or lay low? Navigate passing periods and a risky lunchtime to shape your day.</p>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h3 class="text-xl font-bold text-white mb-4">UI/UX Design</h3>
+                <ul class="space-y-2 custom-list pl-4">
+                    <li><strong>The Phone:</strong> The central hub for apps (Jobs, Contacts, Item-Flipping, Reputation, Notes).</li>
+                    <li><strong>Dialogue:</strong> Timed, choice-based system.</li>
+                    <li><strong>HUD:</strong> Minimalist display of time, money, and reputation status.</li>
+                </ul>
             </div>
-            <div class="card">
-                <h4 class="text-2xl font-semibold mb-2 text-yellow-300">The Social Grind</h4>
-                <p class="text-gray-300">It's not just who you know, it's how you know them. Win dialogue minigames, get invited to hangouts, and don't be a social leper. The ultimate goal? Throwing legendary parties.</p>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h3 class="text-xl font-bold text-white mb-4">Ultimate Goal</h3>
+                <p>Go from a lonely newcomer to a social legend by throwing the most epic end-of-year party the school has ever seen.</p>
             </div>
-            <div class="card">
-                <h4 class="text-2xl font-semibold mb-2 text-yellow-300">Hangouts & Chemistry</h4>
-                <p class="text-gray-300">Get numbers, get invites. But choose your guest list wisely. Mixing rival cliques is a recipe for disaster. A good party boosts your rep, a bad one tanks it. P.S. Sharing is caring.</p>
-            </div>
-            <div class="card">
-                <h4 class="text-2xl font-semibold mb-2 text-yellow-300">Dynamic Spawning</h4>
-                <p class="text-gray-300">Life's unpredictable. You won't always load your save in the same spot. Wake up in bed, in a bush after a party, or in the middle of a... private moment. Keeps things fresh.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Core Systems Section -->
-    <section id="systems">
-        <h3 class="text-3xl font-bold mb-6 text-center text-white">The Nitty Gritty</h3>
-        <div class="space-y-4">
-            <!-- Accordion Item 1: Economy -->
-            <div class="card">
-                <button class="accordion-button w-full text-left text-2xl font-semibold text-cyan-300 flex justify-between items-center">
-                    <span>Economy & Money-Making</span>
-                    <span class="transform transition-transform duration-300">+</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="pt-4 text-gray-300">
-                        <p class="mb-4">Cash is king. Choose your path to riches:</p>
-                        <h5 class="font-semibold text-lg text-white mb-2">The Straight & Narrow:</h5>
-                        <ul class="detail-list">
-                            <li><strong>Mowing Lawns:</strong> Follow the path perfectly for a better tip. Buy better mowers to work faster.</li>
-                            <li><strong>Washing Cars:</strong> A timed minigame to clean off all the dirt spots evenly.</li>
-                            <li><strong>Tutoring:</strong> If your grades are high, offer to help others with a simple math minigame for cash.</li>
-                        </ul>
-                        <h5 class="font-semibold text-lg text-white mt-4 mb-2">The Side Hustle:</h5>
-                        <ul class="detail-list">
-                            <li><strong>Flipping Items:</strong> Use an "eBuy-like" app to find items NPCs want and sell them for a profit.</li>
-                            <li><strong>The Bully:</strong> Use intimidation dialogue to raise an NPC's fear meter and demand their lunch money. Fail, and you lose social standing.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Accordion Item 2: Stealth -->
-            <div class="card">
-                <button class="accordion-button w-full text-left text-2xl font-semibold text-cyan-300 flex justify-between items-center">
-                    <span>Stealth & Evasion</span>
-                    <span class="transform transition-transform duration-300">+</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="pt-4 text-gray-300">
-                        <p class="mb-4">Don't get caught. This is a game of cat and mouse.</p>
-                        <h5 class="font-semibold text-lg text-white mb-2">Hiding Your Stash:</h5>
-                        <p>Your parents can search your room, and school authorities can search your locker. Disperse illicit items in various hiding spots (loose floorboards, specific boxes) to avoid getting busted and grounded.</p>
-                        <h5 class="font-semibold text-lg text-white mt-4 mb-2">Sobriety Checks:</h5>
-                        <p>Stumble home intoxicated and you might face a minigame to avoid suspicion:</p>
-                        <ul class="detail-list">
-                            <li><strong>Breathing Game:</strong> Control a meter with the spacebar to simulate steady breathing.</li>
-                            <li><strong>Stand Still Game:</strong> A QTE where you must quickly press W, A, S, or D.</li>
-                            <li><strong>Delete Emails Game:</strong> Sneak to the family PC, find the password by looking for fingerprints, and delete incriminating evidence before a parent walks in.</li>
-                        </ul>
-                        <h5 class="font-semibold text-lg text-white mt-4 mb-2">World Hazards:</h5>
-                        <p>The wrong part of town at the wrong time (like the Badlands at night) means you risk getting robbed. A higher reputation makes you less of a target.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Accordion Item 3: Consumables -->
-            <div class="card">
-                <button class="accordion-button w-full text-left text-2xl font-semibold text-cyan-300 flex justify-between items-center">
-                    <span>Drugs & Consumables</span>
-                    <span class="transform transition-transform duration-300">+</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="pt-4 text-gray-300">
-                        <p>From party starters to mind-benders, what you use and who you get it from is a core part of the social climb. Each has unique effects and risks.</p>
-                        <ul class="detail-list">
-                            <li><strong>Alcohol:</strong> Get a fake ID from a specific student to buy from stores.</li>
-                            <li><strong>Weed:</strong> Find a dealer and build loyalty for better prices.</li>
-                            <li><strong>Shrooms:</strong> Become good friends with a weed dealer.</li>
-                            <li><strong>Molly:</strong> Achieve a high social standing with a specific Jock to get the contact.</li>
-                            <li><strong>LSD & DMT:</strong> Endgame drugs unlocked by maxing out loyalty with specific, high-level dealers.</li>
-                            <li><strong>"Study Pills":</strong> Boosts grades but carries a high risk of addiction.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Accordion Item 4: Heists -->
-            <div class="card">
-                <button class="accordion-button w-full text-left text-2xl font-semibold text-cyan-300 flex justify-between items-center">
-                    <span>The Heist System</span>
-                    <span class="transform transition-transform duration-300">+</span>
-                </button>
-                <div class="accordion-content">
-                    <div class="pt-4 text-gray-300">
-                        <p class="mb-4">For the truly ambitious. Plan and execute heists managed through your phone's "Notes" app. The loop is simple: Unlock the heist, Recruit a skilled crew, complete Setup missions, and Execute for big rewards.</p>
-                        <h5 class="font-semibold text-lg text-white mt-4 mb-2">Example Heists:</h5>
-                        <ul class="detail-list">
-                            <li><strong>Small Scale:</strong> Steal a teacher's wallet, change your grades on the school computer, or swipe the answers for next week's quiz.</li>
-                            <li><strong>Large Scale:</strong> Plan and execute a full-on raid to steal a large quantity of weed from a rival dealer's stash house.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Endgame Section -->
-    <section id="endgame" class="text-center py-20 px-4 mt-20">
-        <div class="card">
-            <h3 class="text-4xl font-bold text-white mb-4">The Ultimate Goal</h3>
-            <p class="text-xl text-gray-400 max-w-3xl mx-auto">Go from a nobody to a legend. Your final exam? Throwing an end-of-year party so epic, it goes down in Northwood High history.</p>
         </div>
     </section>
 
 </main>
 
-<!-- Footer -->
-<footer class="text-center py-8 mt-12 border-t border-gray-700">
-    <p class="text-gray-500">&copy; 2024 New Comer. An Indie Game Concept. All rights reserved.</p>
+<footer class="text-center py-8 border-t border-gray-800">
+    <p class="text-gray-500">Game Concept &copy; 2024</p>
 </footer>
 
 <script>
-    document.querySelectorAll('.accordion-button').forEach(button => {
-        button.addEventListener('click', () => {
-            const accordionContent = button.nextElementSibling;
-            button.classList.toggle('active');
-            const icon = button.querySelector('span:last-child');
-            if (button.classList.contains('active')) {
-                icon.textContent = '-';
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                icon.textContent = '+';
-                icon.style.transform = 'rotate(0deg)';
-            }
-        });
-    });
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Scrollspy Logic ---
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('#nav-links a');
 
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
+        const onScroll = () => {
+            let current = '';
 
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                // Adjust the offset to trigger the highlight a bit earlier
+                if (pageYOffset >= sectionTop - 120) {
+                    current = section.getAttribute('id');
+                }
             });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', onScroll);
+        onScroll(); // Run on page load to highlight the top section
+
+        // --- Reveal on Scroll Logic ---
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Optional: unobserve after revealing to save resources
+                    // observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        });
+
+        revealElements.forEach(el => {
+            observer.observe(el);
         });
     });
-
 </script>
+
 </body>
 </html>
